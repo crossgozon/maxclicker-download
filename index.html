@@ -1,0 +1,283 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maxclicker Download</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-1: #09162a;
+      --bg-2: #0f2745;
+      --panel: rgba(7, 20, 38, 0.82);
+      --panel-border: rgba(123, 186, 255, 0.18);
+      --text: #edf6ff;
+      --muted: #9ec4e8;
+      --accent: #28a7e1;
+      --accent-2: #f0a240;
+      --button: #1194d3;
+      --button-hover: #0c7db3;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(240, 162, 64, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(40, 167, 225, 0.18), transparent 36%),
+        linear-gradient(160deg, var(--bg-1), var(--bg-2));
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .shell {
+      width: min(760px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 28px 32px 18px;
+      border-bottom: 1px solid rgba(123, 186, 255, 0.14);
+      background: linear-gradient(90deg, rgba(17, 148, 211, 0.16), rgba(240, 162, 64, 0.1));
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 52px);
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+
+    .sub {
+      margin: 12px 0 0;
+      max-width: 560px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .content {
+      padding: 28px 32px 32px;
+      display: grid;
+      gap: 20px;
+    }
+
+    .status {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(123, 186, 255, 0.12);
+      border-radius: 18px;
+      padding: 16px 18px;
+      min-height: 94px;
+    }
+
+    .card .label {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .card .value {
+      font-size: 19px;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(180deg, var(--button), var(--button-hover));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+      box-shadow: 0 10px 24px rgba(17, 148, 211, 0.26);
+    }
+
+    .button:hover { transform: translateY(-1px); }
+    .button[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.48;
+      box-shadow: none;
+    }
+
+    .button.secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: none;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .error {
+      color: #ffc8c8;
+      background: rgba(177, 49, 49, 0.16);
+      border: 1px solid rgba(255, 130, 130, 0.18);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: none;
+    }
+
+    .footer {
+      color: rgba(216, 233, 248, 0.76);
+      font-size: 12px;
+      border-top: 1px solid rgba(123, 186, 255, 0.12);
+      padding-top: 18px;
+    }
+
+    @media (max-width: 640px) {
+      .header, .content { padding-left: 20px; padding-right: 20px; }
+      .status { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="header">
+      <div class="eyebrow">Official Download</div>
+      <h1>Maxclicker</h1>
+      <p class="sub">Download the latest approved build. This page reads the newest GitHub Release automatically, so the link stays current as new versions are published.</p>
+    </section>
+
+    <section class="content">
+      <div class="status">
+        <article class="card">
+          <div class="label">Latest Version</div>
+          <div class="value" id="versionValue">Checking...</div>
+        </article>
+        <article class="card">
+          <div class="label">Release Date</div>
+          <div class="value" id="dateValue">Checking...</div>
+        </article>
+        <article class="card">
+          <div class="label">File</div>
+          <div class="value" id="fileValue">Looking for .exe asset...</div>
+        </article>
+      </div>
+
+      <div class="error" id="errorBox"></div>
+
+      <div class="actions">
+        <a class="button" id="downloadButton" href="#" aria-disabled="true">Download Latest Version</a>
+        <a class="button secondary" href="https://github.com/crossgozon/maxclicker-download/releases" target="_blank" rel="noreferrer">View Releases</a>
+      </div>
+
+      <div class="note">
+        Publish a GitHub Release in this repository and attach the Windows executable file. The page will detect the newest release asset automatically.
+      </div>
+
+      <div class="footer">
+        Maxclicker download page hosted on GitHub Pages.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (async function () {
+      const repo = 'crossgozon/maxclicker-download';
+      const apiUrl = `https://api.github.com/repos/${repo}/releases/latest`;
+      const versionValue = document.getElementById('versionValue');
+      const dateValue = document.getElementById('dateValue');
+      const fileValue = document.getElementById('fileValue');
+      const downloadButton = document.getElementById('downloadButton');
+      const errorBox = document.getElementById('errorBox');
+
+      try {
+        const response = await fetch(apiUrl, {
+          headers: {
+            'Accept': 'application/vnd.github+json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`GitHub API returned ${response.status}`);
+        }
+
+        const release = await response.json();
+        const assets = Array.isArray(release.assets) ? release.assets : [];
+        const exeAsset = assets.find(asset => /\.exe$/i.test(asset.name || '')) || assets[0];
+
+        versionValue.textContent = release.tag_name || release.name || 'Unknown';
+        dateValue.textContent = release.published_at
+          ? new Date(release.published_at).toLocaleString('en-US', {
+              year: 'numeric', month: 'short', day: 'numeric',
+              hour: 'numeric', minute: '2-digit'
+            })
+          : 'Not available';
+
+        if (!exeAsset || !exeAsset.browser_download_url) {
+          fileValue.textContent = 'No executable uploaded yet';
+          errorBox.textContent = 'No .exe asset found in the latest release yet.';
+          errorBox.style.display = 'block';
+          return;
+        }
+
+        fileValue.textContent = `${exeAsset.name} (${formatBytes(exeAsset.size || 0)})`;
+        downloadButton.href = exeAsset.browser_download_url;
+        downloadButton.removeAttribute('aria-disabled');
+      } catch (error) {
+        versionValue.textContent = 'Unavailable';
+        dateValue.textContent = 'Unavailable';
+        fileValue.textContent = 'Unavailable';
+        errorBox.textContent = 'Could not read the latest release yet. Publish a release first or try again later.';
+        errorBox.style.display = 'block';
+      }
+
+      function formatBytes(bytes) {
+        if (!bytes) return '0 B';
+        const units = ['B', 'KB', 'MB', 'GB'];
+        let size = bytes;
+        let index = 0;
+        while (size >= 1024 && index < units.length - 1) {
+          size /= 1024;
+          index += 1;
+        }
+        return `${size.toFixed(size >= 100 || index === 0 ? 0 : 1)} ${units[index]}`;
+      }
+    })();
+  </script>
+</body>
+</html>
