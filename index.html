@@ -3,21 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Maxclicker Download</title>
+  <title>Maxclicker Download Preview</title>
   <style>
+    @font-face {
+      font-family: "Rajdhani";
+      src: url("assets/Rajdhani-Bold.ttf") format("truetype");
+      font-weight: 700;
+      font-style: normal;
+    }
+
     :root {
       color-scheme: dark;
-      --bg-1: #09162a;
-      --bg-2: #0f2745;
-      --panel: rgba(7, 20, 38, 0.82);
-      --panel-border: rgba(123, 186, 255, 0.18);
-      --text: #edf6ff;
-      --muted: #9ec4e8;
-      --accent: #28a7e1;
-      --accent-2: #f0a240;
-      --button: #1194d3;
-      --button-hover: #0c7db3;
-      --shadow: 0 24px 60px rgba(0, 0, 0, 0.34);
+      --bg-0: #061121;
+      --bg-1: #0b1e36;
+      --bg-2: #113259;
+      --panel: rgba(8, 23, 43, 0.86);
+      --panel-2: rgba(14, 34, 60, 0.94);
+      --line: rgba(104, 183, 255, 0.18);
+      --text: #eef7ff;
+      --muted: #9ebfe0;
+      --accent: #21a7e3;
+      --accent-2: #ffb24a;
+      --success: #29c46d;
+      --shadow: 0 30px 80px rgba(0, 0, 0, 0.34);
     }
 
     * { box-sizing: border-box; }
@@ -26,210 +34,309 @@
       margin: 0;
       min-height: 100vh;
       font-family: "Segoe UI", Tahoma, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(240, 162, 64, 0.16), transparent 28%),
-        radial-gradient(circle at top right, rgba(40, 167, 225, 0.18), transparent 36%),
-        linear-gradient(160deg, var(--bg-1), var(--bg-2));
       color: var(--text);
-      display: grid;
-      place-items: center;
-      padding: 24px;
+      background:
+        radial-gradient(circle at top left, rgba(255, 178, 74, 0.16), transparent 26%),
+        radial-gradient(circle at top right, rgba(33, 167, 227, 0.18), transparent 34%),
+        linear-gradient(160deg, var(--bg-0), var(--bg-1) 48%, var(--bg-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
     }
 
     .shell {
-      width: min(760px, 100%);
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      border-radius: 24px;
+      width: min(980px, 100%);
+      background: linear-gradient(180deg, rgba(17, 40, 69, 0.96), rgba(8, 21, 40, 0.96));
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      overflow: hidden;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 0;
+      min-height: 430px;
+    }
+
+    .hero-main {
+      padding: 34px 36px 30px;
+      position: relative;
       overflow: hidden;
     }
 
-    .header {
-      padding: 28px 32px 18px;
-      border-bottom: 1px solid rgba(123, 186, 255, 0.14);
-      background: linear-gradient(90deg, rgba(17, 148, 211, 0.16), rgba(240, 162, 64, 0.1));
+    .hero-main::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(145deg, rgba(33, 167, 227, 0.16), transparent 40%),
+        linear-gradient(330deg, rgba(255, 178, 74, 0.14), transparent 36%);
+      pointer-events: none;
     }
 
-    .eyebrow {
-      display: inline-block;
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand-row img {
+      width: 92px;
+      height: 92px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.24));
+    }
+
+    .brand-meta {
+      display: grid;
+      gap: 2px;
+    }
+
+    .brand-kicker {
       font-size: 12px;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent-2);
-      margin-bottom: 10px;
     }
 
-    h1 {
-      margin: 0;
-      font-size: clamp(34px, 5vw, 52px);
-      line-height: 1;
-      letter-spacing: 0.02em;
+    .brand-title {
+      font-family: "Rajdhani", "Segoe UI", Tahoma, sans-serif;
+      font-size: clamp(34px, 5vw, 54px);
+      line-height: 0.96;
+      font-weight: 800;
+      letter-spacing: 0.04em;
     }
 
-    .sub {
-      margin: 12px 0 0;
+    .hero-copy {
+      position: relative;
+      z-index: 1;
       max-width: 560px;
+    }
+
+    .hero-copy p {
+      margin: 0 0 18px;
       color: var(--muted);
       font-size: 15px;
-      line-height: 1.65;
+      line-height: 1.75;
     }
 
-    .content {
-      padding: 28px 32px 32px;
-      display: grid;
-      gap: 20px;
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+      position: relative;
+      z-index: 1;
     }
 
-    .status {
+    .button {
+      min-height: 50px;
+      padding: 0 20px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      text-decoration: none;
+      color: #fff;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .button:hover { transform: translateY(-1px); }
+
+    .button.primary {
+      background: linear-gradient(180deg, #18a0df, #0e81b5);
+      box-shadow: 0 12px 26px rgba(24, 160, 223, 0.26);
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+    }
+
+    .button[aria-disabled="true"] {
+      pointer-events: none;
+      opacity: 0.45;
+      box-shadow: none;
+    }
+
+    .hero-side {
+      border-left: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(11, 29, 51, 0.9), rgba(7, 19, 35, 0.96));
+      padding: 34px 28px 30px;
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
+      align-content: start;
     }
 
-    .card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(123, 186, 255, 0.12);
+    .side-card {
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(104, 183, 255, 0.12);
       border-radius: 18px;
-      padding: 16px 18px;
-      min-height: 94px;
+      padding: 16px 16px 15px;
     }
 
-    .card .label {
+    .side-label {
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
       margin-bottom: 8px;
     }
 
-    .card .value {
-      font-size: 19px;
+    .side-value {
+      font-size: 21px;
       line-height: 1.35;
       word-break: break-word;
     }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
+    .side-value.small {
+      font-size: 16px;
     }
 
-    .button {
+    .status-row {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 0 20px;
-      border-radius: 14px;
-      text-decoration: none;
-      font-weight: 700;
-      color: #fff;
-      background: linear-gradient(180deg, var(--button), var(--button-hover));
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
-      box-shadow: 0 10px 24px rgba(17, 148, 211, 0.26);
+      gap: 8px;
+      font-size: 13px;
+      color: #d8f8e6;
+      background: rgba(41, 196, 109, 0.12);
+      border: 1px solid rgba(41, 196, 109, 0.18);
+      border-radius: 999px;
+      padding: 7px 12px;
     }
 
-    .button:hover { transform: translateY(-1px); }
-    .button[aria-disabled="true"] {
-      pointer-events: none;
-      opacity: 0.48;
-      box-shadow: none;
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--success);
+      box-shadow: 0 0 0 4px rgba(41, 196, 109, 0.14);
     }
 
-    .button.secondary {
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.06);
-      box-shadow: none;
-    }
-
-    .note {
+    .foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding: 18px 26px 20px;
       color: var(--muted);
       font-size: 13px;
-      line-height: 1.6;
+      background: rgba(4, 12, 24, 0.52);
     }
 
-    .error {
-      color: #ffc8c8;
-      background: rgba(177, 49, 49, 0.16);
-      border: 1px solid rgba(255, 130, 130, 0.18);
-      border-radius: 14px;
-      padding: 12px 14px;
+    .error-box {
       display: none;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(179, 52, 52, 0.16);
+      border: 1px solid rgba(255, 123, 123, 0.18);
+      color: #ffd1d1;
+      position: relative;
+      z-index: 1;
     }
 
-    .footer {
-      color: rgba(216, 233, 248, 0.76);
-      font-size: 12px;
-      border-top: 1px solid rgba(123, 186, 255, 0.12);
-      padding-top: 18px;
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-side {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .foot {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
 
-    @media (max-width: 640px) {
-      .header, .content { padding-left: 20px; padding-right: 20px; }
-      .status { grid-template-columns: 1fr; }
+    @media (max-width: 580px) {
+      body { padding: 14px; }
+      .hero-main, .hero-side { padding: 24px 20px; }
+      .foot { padding: 16px 20px 18px; }
+      .brand-row img { width: 70px; height: 70px; }
     }
   </style>
 </head>
 <body>
   <main class="shell">
-    <section class="header">
-      <div class="eyebrow">Official Download</div>
-      <h1>Maxclicker</h1>
-      <p class="sub">Download the latest approved build. This page reads the newest GitHub Release automatically, so the link stays current as new versions are published.</p>
+    <section class="hero">
+      <div class="hero-main">
+        <div class="brand-row">
+          <img src="assets/new-icon.png" alt="Maxclicker logo">
+          <div class="brand-meta">
+            <div class="brand-kicker">Official Build</div>
+            <div class="brand-title">Maxclicker</div>
+          </div>
+        </div>
+
+        <div class="hero-copy">
+          <p>Download the latest approved Maxclicker release. This page reads the newest GitHub Release automatically, so you only need to publish a new release asset when a version changes.</p>
+          <p>The desktop app can redirect older builds here when an update is required, while current builds continue to run normally.</p>
+        </div>
+
+        <div class="hero-actions">
+          <a id="downloadButton" class="button primary" href="#" aria-disabled="true">Download Latest Build</a>
+          <a class="button secondary" href="https://github.com/crossgozon/maxclicker-download/releases" target="_blank" rel="noreferrer">View Releases</a>
+        </div>
+
+        <div id="errorBox" class="error-box"></div>
+      </div>
+
+      <aside class="hero-side">
+        <div class="status-row">
+          <span class="status-dot"></span>
+          <span>Release channel online</span>
+        </div>
+
+        <div class="side-card">
+          <div class="side-label">Latest Version</div>
+          <div id="versionValue" class="side-value">Checking...</div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-label">Published</div>
+          <div id="dateValue" class="side-value small">Checking...</div>
+        </div>
+
+        <div class="side-card">
+          <div class="side-label">Package</div>
+          <div id="fileValue" class="side-value small">Looking for release asset...</div>
+        </div>
+      </aside>
     </section>
 
-    <section class="content">
-      <div class="status">
-        <article class="card">
-          <div class="label">Latest Version</div>
-          <div class="value" id="versionValue">Checking...</div>
-        </article>
-        <article class="card">
-          <div class="label">Release Date</div>
-          <div class="value" id="dateValue">Checking...</div>
-        </article>
-        <article class="card">
-          <div class="label">File</div>
-          <div class="value" id="fileValue">Looking for .exe asset...</div>
-        </article>
-      </div>
-
-      <div class="error" id="errorBox"></div>
-
-      <div class="actions">
-        <a class="button" id="downloadButton" href="#" aria-disabled="true">Download Latest Version</a>
-        <a class="button secondary" href="https://github.com/crossgozon/maxclicker-download/releases" target="_blank" rel="noreferrer">View Releases</a>
-      </div>
-
-      <div class="note">
-        Publish a GitHub Release in this repository and attach the Windows executable file. The page will detect the newest release asset automatically.
-      </div>
-
-      <div class="footer">
-        Maxclicker download page hosted on GitHub Pages.
-      </div>
-    </section>
+    <footer class="foot">
+      <div>Hosted through GitHub Pages. Release assets are served by GitHub Releases.</div>
+      <div>Official Maxclicker download page.</div>
+    </footer>
   </main>
 
   <script>
     (async function () {
-      const repo = 'crossgozon/maxclicker-download';
+      const repo = "crossgozon/maxclicker-download";
       const apiUrl = `https://api.github.com/repos/${repo}/releases/latest`;
-      const versionValue = document.getElementById('versionValue');
-      const dateValue = document.getElementById('dateValue');
-      const fileValue = document.getElementById('fileValue');
-      const downloadButton = document.getElementById('downloadButton');
-      const errorBox = document.getElementById('errorBox');
+      const versionValue = document.getElementById("versionValue");
+      const dateValue = document.getElementById("dateValue");
+      const fileValue = document.getElementById("fileValue");
+      const downloadButton = document.getElementById("downloadButton");
+      const errorBox = document.getElementById("errorBox");
 
       try {
         const response = await fetch(apiUrl, {
-          headers: {
-            'Accept': 'application/vnd.github+json'
-          }
+          headers: { "Accept": "application/vnd.github+json" }
         });
 
         if (!response.ok) {
@@ -238,37 +345,40 @@
 
         const release = await response.json();
         const assets = Array.isArray(release.assets) ? release.assets : [];
-        const exeAsset = assets.find(asset => /\.exe$/i.test(asset.name || '')) || assets[0];
+        const packageAsset = assets.find(asset => /\.(zip|exe)$/i.test(asset.name || "")) || assets[0];
 
-        versionValue.textContent = release.tag_name || release.name || 'Unknown';
+        versionValue.textContent = release.tag_name || release.name || "Unavailable";
         dateValue.textContent = release.published_at
-          ? new Date(release.published_at).toLocaleString('en-US', {
-              year: 'numeric', month: 'short', day: 'numeric',
-              hour: 'numeric', minute: '2-digit'
+          ? new Date(release.published_at).toLocaleString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit"
             })
-          : 'Not available';
+          : "Not available";
 
-        if (!exeAsset || !exeAsset.browser_download_url) {
-          fileValue.textContent = 'No executable uploaded yet';
-          errorBox.textContent = 'No .exe asset found in the latest release yet.';
-          errorBox.style.display = 'block';
+        if (!packageAsset || !packageAsset.browser_download_url) {
+          fileValue.textContent = "No package uploaded yet";
+          errorBox.textContent = "No release package was found yet. Upload a .zip or .exe asset to the latest release.";
+          errorBox.style.display = "block";
           return;
         }
 
-        fileValue.textContent = `${exeAsset.name} (${formatBytes(exeAsset.size || 0)})`;
-        downloadButton.href = exeAsset.browser_download_url;
-        downloadButton.removeAttribute('aria-disabled');
+        fileValue.textContent = `${packageAsset.name} (${formatBytes(packageAsset.size || 0)})`;
+        downloadButton.href = packageAsset.browser_download_url;
+        downloadButton.removeAttribute("aria-disabled");
       } catch (error) {
-        versionValue.textContent = 'Unavailable';
-        dateValue.textContent = 'Unavailable';
-        fileValue.textContent = 'Unavailable';
-        errorBox.textContent = 'Could not read the latest release yet. Publish a release first or try again later.';
-        errorBox.style.display = 'block';
+        versionValue.textContent = "Unavailable";
+        dateValue.textContent = "Unavailable";
+        fileValue.textContent = "Unavailable";
+        errorBox.textContent = "Could not read the latest release right now. Check the repo release or try again later.";
+        errorBox.style.display = "block";
       }
 
       function formatBytes(bytes) {
-        if (!bytes) return '0 B';
-        const units = ['B', 'KB', 'MB', 'GB'];
+        if (!bytes) return "0 B";
+        const units = ["B", "KB", "MB", "GB"];
         let size = bytes;
         let index = 0;
         while (size >= 1024 && index < units.length - 1) {
@@ -281,3 +391,4 @@
   </script>
 </body>
 </html>
+
