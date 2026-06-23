@@ -44,11 +44,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 28px;
+      padding: 20px;
     }
 
     .shell {
-      width: min(980px, 100%);
+      width: min(1120px, 100%);
       background: linear-gradient(180deg, rgba(17, 40, 69, 0.96), rgba(8, 21, 40, 0.96));
       border: 1px solid var(--line);
       border-radius: 26px;
@@ -59,13 +59,13 @@
 
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
       gap: 0;
-      min-height: 430px;
+      min-height: 0;
     }
 
     .hero-main {
-      padding: 34px 36px 30px;
+      padding: 28px 30px 24px;
       position: relative;
       overflow: hidden;
     }
@@ -84,14 +84,14 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
       position: relative;
       z-index: 1;
     }
 
     .brand-row img {
-      width: 92px;
-      height: 92px;
+      width: 78px;
+      height: 78px;
       object-fit: contain;
       filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.24));
     }
@@ -123,19 +123,154 @@
     }
 
     .hero-copy p {
-      margin: 0 0 18px;
+      margin: 0 0 12px;
       color: var(--muted);
-      font-size: 15px;
-      line-height: 1.75;
+      font-size: 14px;
+      line-height: 1.65;
     }
 
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 24px;
+    .gallery {
       position: relative;
       z-index: 1;
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .gallery-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .gallery-title {
+      font-family: "Rajdhani", "Segoe UI", Tahoma, sans-serif;
+      font-size: 21px;
+      line-height: 1;
+      letter-spacing: 0.04em;
+    }
+
+    .gallery-subtitle {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .gallery-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gallery-nav {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .gallery-nav:hover {
+      transform: translateY(-1px);
+      border-color: rgba(33, 167, 227, 0.42);
+      background: rgba(33, 167, 227, 0.12);
+    }
+
+    .gallery-stage {
+      display: grid;
+      gap: 10px;
+    }
+
+    .gallery-frame {
+      margin: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(104, 183, 255, 0.18);
+      background: rgba(3, 9, 18, 0.62);
+      box-shadow: 0 24px 44px rgba(0, 0, 0, 0.28);
+    }
+
+    .gallery-viewport {
+      overflow: hidden;
+      background: #07111d;
+    }
+
+    .gallery-track {
+      display: flex;
+      width: 100%;
+      transition: transform 0.32s ease;
+      will-change: transform;
+    }
+
+    .gallery-slide {
+      min-width: 100%;
+      display: grid;
+    }
+
+    .gallery-media {
+      padding: 16px;
+      background: #07111d;
+    }
+
+    .gallery-slide img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 7.5;
+      object-fit: contain;
+      object-position: center;
+      background: #07111d;
+    }
+
+    .gallery-caption {
+      display: grid;
+      gap: 4px;
+      padding: 12px 14px 13px;
+      background: linear-gradient(180deg, rgba(9, 22, 40, 0.85), rgba(5, 14, 26, 0.9));
+    }
+
+    .gallery-caption strong {
+      font-size: 14px;
+    }
+
+    .gallery-caption span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .gallery-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding-top: 2px;
+    }
+
+    .gallery-dot {
+      width: 10px;
+      height: 10px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .gallery-dot:hover {
+      transform: scale(1.08);
+      background: rgba(255, 255, 255, 0.34);
+    }
+
+    .gallery-dot.active {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(33, 167, 227, 0.16);
     }
 
     .button {
@@ -173,17 +308,27 @@
     .hero-side {
       border-left: 1px solid var(--line);
       background: linear-gradient(180deg, rgba(11, 29, 51, 0.9), rgba(7, 19, 35, 0.96));
-      padding: 34px 28px 30px;
+      padding: 28px 22px 24px;
       display: grid;
-      gap: 14px;
+      gap: 12px;
       align-content: start;
+    }
+
+    .side-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 2px;
+    }
+
+    .side-actions .button {
+      width: 100%;
     }
 
     .side-card {
       background: rgba(255, 255, 255, 0.035);
       border: 1px solid rgba(104, 183, 255, 0.12);
       border-radius: 18px;
-      padding: 16px 16px 15px;
+      padding: 14px 14px 13px;
     }
 
     .side-label {
@@ -195,13 +340,13 @@
     }
 
     .side-value {
-      font-size: 21px;
-      line-height: 1.35;
+      font-size: 19px;
+      line-height: 1.25;
       word-break: break-word;
     }
 
     .side-value.small {
-      font-size: 16px;
+      font-size: 15px;
     }
 
     .status-row {
@@ -230,9 +375,9 @@
       gap: 20px;
       align-items: center;
       border-top: 1px solid var(--line);
-      padding: 18px 26px 20px;
+      padding: 14px 22px 16px;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12px;
       background: rgba(4, 12, 24, 0.52);
     }
 
@@ -266,7 +411,7 @@
 
     @media (max-width: 580px) {
       body { padding: 14px; }
-      .hero-main, .hero-side { padding: 24px 20px; }
+      .hero-main, .hero-side { padding: 22px 18px; }
       .foot { padding: 16px 20px 18px; }
       .brand-row img { width: 70px; height: 70px; }
     }
@@ -285,14 +430,53 @@
         </div>
 
         <div class="hero-copy">
-          <p>Download the latest approved Maxclicker release. This page reads the newest GitHub Release automatically, so you only need to publish a new release asset when a version changes.</p>
-          <p>The desktop app can redirect older builds here when an update is required, while current builds continue to run normally.</p>
+          <p>Download the latest approved Maxclicker release. This page tracks the newest GitHub Release automatically, so published assets stay in sync with version updates.</p>
+          <p>Older builds can be redirected here when an update is required.</p>
         </div>
 
-        <div class="hero-actions">
-          <a id="downloadButton" class="button primary" href="#" aria-disabled="true">Download Latest Build</a>
-          <a class="button secondary" href="https://github.com/crossgozon/maxclicker-download/releases" target="_blank" rel="noreferrer">View Releases</a>
-        </div>
+        <section class="gallery" aria-label="Maxclicker interface gallery">
+          <div class="gallery-head">
+            <div>
+              <div class="gallery-title">Window Modes</div>
+              <div class="gallery-subtitle">Compact mode keeps the tool minimal. Normal mode exposes the full working panel.</div>
+            </div>
+            <div class="gallery-controls">
+              <button id="galleryPrev" class="gallery-nav" type="button" aria-label="Show previous screenshot">&#8249;</button>
+              <button id="galleryNext" class="gallery-nav" type="button" aria-label="Show next screenshot">&#8250;</button>
+            </div>
+          </div>
+
+          <div class="gallery-stage">
+            <figure class="gallery-frame">
+              <div class="gallery-viewport">
+                <div id="galleryTrack" class="gallery-track">
+                  <div class="gallery-slide">
+                    <div class="gallery-media">
+                      <img src="assets/normal.png" alt="Maxclicker normal window">
+                    </div>
+                    <figcaption class="gallery-caption">
+                      <strong>Normal Window</strong>
+                      <span>Expanded layout with the main controls and status details visible for the full Maxclicker workflow.</span>
+                    </figcaption>
+                  </div>
+                  <div class="gallery-slide">
+                    <div class="gallery-media">
+                      <img src="assets/compact.png" alt="Maxclicker compact window">
+                    </div>
+                    <figcaption class="gallery-caption">
+                      <strong>Compact Window</strong>
+                      <span>Minimal controls for a smaller desktop footprint while keeping the core start and stop actions accessible.</span>
+                    </figcaption>
+                  </div>
+                </div>
+              </div>
+            </figure>
+            <div class="gallery-dots" aria-label="Gallery slides">
+              <button class="gallery-dot active" type="button" data-index="0" aria-label="Show normal window" aria-pressed="true"></button>
+              <button class="gallery-dot" type="button" data-index="1" aria-label="Show compact window" aria-pressed="false"></button>
+            </div>
+          </div>
+        </section>
 
         <div id="errorBox" class="error-box"></div>
       </div>
@@ -317,6 +501,11 @@
           <div class="side-label">Package</div>
           <div id="fileValue" class="side-value small">Looking for release asset...</div>
         </div>
+
+        <div class="side-actions">
+          <a id="downloadButton" class="button primary" href="#" aria-disabled="true">Download Latest Build</a>
+          <a class="button secondary" href="https://github.com/crossgozon/maxclicker-download/releases" target="_blank" rel="noreferrer">View Releases</a>
+        </div>
       </aside>
     </section>
 
@@ -335,6 +524,12 @@
       const fileValue = document.getElementById("fileValue");
       const downloadButton = document.getElementById("downloadButton");
       const errorBox = document.getElementById("errorBox");
+      const galleryTrack = document.getElementById("galleryTrack");
+      const galleryPrev = document.getElementById("galleryPrev");
+      const galleryNext = document.getElementById("galleryNext");
+      const galleryDots = Array.from(document.querySelectorAll(".gallery-dot"));
+      const gallerySlides = Array.from(document.querySelectorAll(".gallery-slide"));
+      let galleryIndex = 0;
 
       try {
         const response = await fetch(apiUrl, {
@@ -351,13 +546,14 @@
 
         versionValue.textContent = release.tag_name || release.name || "Unavailable";
         dateValue.textContent = release.published_at
-          ? new Date(release.published_at).toLocaleString("en-US", {
+          ? new Intl.DateTimeFormat(undefined, {
               year: "numeric",
               month: "short",
               day: "numeric",
               hour: "numeric",
-              minute: "2-digit"
-            })
+              minute: "2-digit",
+              timeZoneName: "short"
+            }).format(new Date(release.published_at))
           : "Not available";
 
         if (!packageAsset || !packageAsset.browser_download_url) {
@@ -389,6 +585,25 @@
         }
         return `${size.toFixed(size >= 100 || index === 0 ? 0 : 1)} ${units[index]}`;
       }
+
+      function renderGallery(index) {
+        galleryIndex = (index + gallerySlides.length) % gallerySlides.length;
+        galleryTrack.style.transform = `translateX(-${galleryIndex * 100}%)`;
+        galleryDots.forEach((dot, dotIndex) => {
+          const active = dotIndex === galleryIndex;
+          dot.classList.toggle("active", active);
+          dot.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+      }
+
+      galleryPrev.addEventListener("click", () => renderGallery(galleryIndex - 1));
+      galleryNext.addEventListener("click", () => renderGallery(galleryIndex + 1));
+      galleryDots.forEach(dot => {
+        dot.addEventListener("click", () => {
+          renderGallery(Number(dot.dataset.index || 0));
+        });
+      });
+      renderGallery(0);
     })();
   </script>
 </body>
