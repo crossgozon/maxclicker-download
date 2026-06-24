@@ -503,7 +503,7 @@
         </div>
 
         <div class="side-actions">
-          <a id="downloadButton" class="button primary" href="#" aria-disabled="true">Download Latest Build</a>
+          <button id="downloadButton" class="button primary" type="button" aria-disabled="true">Download Latest Build</button>
           <a class="button secondary" href="https://github.com/crossgozon/maxclicker-download/releases" target="_blank" rel="noreferrer">View Releases</a>
         </div>
       </aside>
@@ -652,6 +652,7 @@
       downloadButton.addEventListener("click", async function (event) {
         const directUrl = downloadButton.getAttribute("data-direct-url");
         if (!directUrl) {
+          event.preventDefault();
           return;
         }
 
@@ -670,12 +671,10 @@
         }
 
         if (!canUseBlob) {
-          event.preventDefault();
           triggerDownload(directUrl, fileName);
           return;
         }
 
-        event.preventDefault();
         downloadButton.textContent = "Preparing download...";
         const prepared = await tryPrepareBlobDownload(directUrl, directUrl, fileName);
         downloadButton.textContent = "Download Latest Build";
