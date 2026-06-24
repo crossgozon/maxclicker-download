@@ -659,7 +659,7 @@
 
         const fileName = downloadButton.getAttribute("download") || "Maxclicker.1.0.1.zip";
         const hasBlobFailed = downloadButton.getAttribute("data-blob-failed") === "1";
-        const canUseBlob = location.protocol.startsWith("http") && !hasBlobFailed && !downloadButton.getAttribute("download-ready-blob");
+        const canUseBlob = !hasBlobFailed && !downloadButton.getAttribute("download-ready-blob");
 
         if (hasBlobFailed) {
           triggerDownload(directUrl, fileName);
