@@ -532,6 +532,7 @@
       let galleryIndex = 0;
       let blobUrlCache = null;
       let isPreparingBlob = false;
+      let isBlobPrepared = false;
       let galleryAutoSlideTimer = null;
 
       try {
@@ -571,6 +572,7 @@
         downloadButton.setAttribute("data-direct-url", packageAsset.browser_download_url);
         downloadButton.setAttribute("download", packageAsset.name || "Maxclicker.1.0.1.zip");
         downloadButton.removeAttribute("aria-disabled");
+        preloadDownload(packageAsset.browser_download_url, packageAsset.name || "Maxclicker.1.0.1.zip");
       } catch (error) {
         versionValue.textContent = "Unavailable";
         dateValue.textContent = "Unavailable";
@@ -595,6 +597,7 @@
         const fallbackToDirect = () => {
           downloadButton.href = fallbackUrl;
           downloadButton.setAttribute("data-blob-failed", "1");
+          isBlobPrepared = false;
           return false;
         };
 
@@ -618,12 +621,32 @@
           downloadButton.href = blobUrlCache;
           downloadButton.setAttribute("download", fileName || "Maxclicker.1.0.1.zip");
           downloadButton.removeAttribute("data-blob-failed");
+          isBlobPrepared = true;
           return true;
         } catch {
+          isBlobPrepared = false;
           return fallbackToDirect();
         } finally {
           isPreparingBlob = false;
         }
+      }
+
+      function triggerDownload(url, fileName) {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName || "Maxclicker.1.0.1.zip";
+        link.rel = "noopener";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+
+      async function preloadDownload(directUrl, fileName) {
+        if (!directUrl || isBlobPrepared || isPreparingBlob || downloadButton.getAttribute("data-blob-failed") === "1") {
+          return;
+        }
+
+        await tryPrepareBlobDownload(directUrl, directUrl, fileName);
       }
 
       downloadButton.addEventListener("click", async function (event) {
@@ -636,11 +659,19 @@
         const hasBlobFailed = downloadButton.getAttribute("data-blob-failed") === "1";
         const canUseBlob = location.protocol.startsWith("http") && !hasBlobFailed && !downloadButton.getAttribute("download-ready-blob");
 
-        if (blobUrlCache || hasBlobFailed) {
+        if (hasBlobFailed) {
+          triggerDownload(directUrl, fileName);
+          return;
+        }
+
+        if (isBlobPrepared && blobUrlCache) {
+          triggerDownload(blobUrlCache, fileName);
           return;
         }
 
         if (!canUseBlob) {
+          event.preventDefault();
+          triggerDownload(directUrl, fileName);
           return;
         }
 
@@ -651,12 +682,11 @@
 
         if (prepared) {
           downloadButton.setAttribute("download-ready-blob", "1");
-          // Keep the user flow consistent if click was prepped by script.
-          window.location.href = downloadButton.href;
+          triggerDownload(blobUrlCache, fileName);
           return;
         }
 
-        window.location.href = directUrl;
+        triggerDownload(directUrl, fileName);
       });
 
       window.addEventListener("beforeunload", function () {
