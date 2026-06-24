@@ -530,6 +530,9 @@
       const galleryDots = Array.from(document.querySelectorAll(".gallery-dot"));
       const gallerySlides = Array.from(document.querySelectorAll(".gallery-slide"));
       let galleryIndex = 0;
+      let blobUrlCache = null;
+      let isPreparingBlob = false;
+      let galleryAutoSlideTimer = null;
 
       try {
         const response = await fetch(apiUrl, {
@@ -565,6 +568,8 @@
 
         fileValue.textContent = `${packageAsset.name} (${formatBytes(packageAsset.size || 0)})`;
         downloadButton.href = packageAsset.browser_download_url;
+        downloadButton.setAttribute("data-direct-url", packageAsset.browser_download_url);
+        downloadButton.setAttribute("download", packageAsset.name || "Maxclicker.1.0.1.zip");
         downloadButton.removeAttribute("aria-disabled");
       } catch (error) {
         versionValue.textContent = "Unavailable";
@@ -586,6 +591,81 @@
         return `${size.toFixed(size >= 100 || index === 0 ? 0 : 1)} ${units[index]}`;
       }
 
+      async function tryPrepareBlobDownload(url, fallbackUrl, fileName) {
+        const fallbackToDirect = () => {
+          downloadButton.href = fallbackUrl;
+          downloadButton.setAttribute("data-blob-failed", "1");
+          return false;
+        };
+
+        if (isPreparingBlob) {
+          return false;
+        }
+
+        isPreparingBlob = true;
+        try {
+          const response = await fetch(url, { method: "GET" });
+          if (!response.ok) {
+            throw new Error(`Unable to prepare file (${response.status}).`);
+          }
+
+          const blob = await response.blob();
+          if (blobUrlCache) {
+            URL.revokeObjectURL(blobUrlCache);
+          }
+
+          blobUrlCache = URL.createObjectURL(blob);
+          downloadButton.href = blobUrlCache;
+          downloadButton.setAttribute("download", fileName || "Maxclicker.1.0.1.zip");
+          downloadButton.removeAttribute("data-blob-failed");
+          return true;
+        } catch {
+          return fallbackToDirect();
+        } finally {
+          isPreparingBlob = false;
+        }
+      }
+
+      downloadButton.addEventListener("click", async function (event) {
+        const directUrl = downloadButton.getAttribute("data-direct-url");
+        if (!directUrl) {
+          return;
+        }
+
+        const fileName = downloadButton.getAttribute("download") || "Maxclicker.1.0.1.zip";
+        const hasBlobFailed = downloadButton.getAttribute("data-blob-failed") === "1";
+        const canUseBlob = location.protocol.startsWith("http") && !hasBlobFailed && !downloadButton.getAttribute("download-ready-blob");
+
+        if (blobUrlCache || hasBlobFailed) {
+          return;
+        }
+
+        if (!canUseBlob) {
+          return;
+        }
+
+        event.preventDefault();
+        downloadButton.textContent = "Preparing download...";
+        const prepared = await tryPrepareBlobDownload(directUrl, directUrl, fileName);
+        downloadButton.textContent = "Download Latest Build";
+
+        if (prepared) {
+          downloadButton.setAttribute("download-ready-blob", "1");
+          // Keep the user flow consistent if click was prepped by script.
+          window.location.href = downloadButton.href;
+          return;
+        }
+
+        window.location.href = directUrl;
+      });
+
+      window.addEventListener("beforeunload", function () {
+        if (blobUrlCache) {
+          URL.revokeObjectURL(blobUrlCache);
+          blobUrlCache = null;
+        }
+      });
+
       function renderGallery(index) {
         galleryIndex = (index + gallerySlides.length) % gallerySlides.length;
         galleryTrack.style.transform = `translateX(-${galleryIndex * 100}%)`;
@@ -596,14 +676,51 @@
         });
       }
 
-      galleryPrev.addEventListener("click", () => renderGallery(galleryIndex - 1));
-      galleryNext.addEventListener("click", () => renderGallery(galleryIndex + 1));
+      function startAutoGallery() {
+        if (galleryAutoSlideTimer) {
+          return;
+        }
+
+        galleryAutoSlideTimer = setInterval(() => {
+          renderGallery(galleryIndex + 1);
+        }, 5000);
+      }
+
+      function resetAutoGallery() {
+        if (galleryAutoSlideTimer) {
+          clearInterval(galleryAutoSlideTimer);
+          galleryAutoSlideTimer = null;
+        }
+
+        startAutoGallery();
+      }
+
+      function stopAutoGallery() {
+        if (galleryAutoSlideTimer) {
+          clearInterval(galleryAutoSlideTimer);
+          galleryAutoSlideTimer = null;
+        }
+      }
+
+      galleryPrev.addEventListener("click", () => {
+        renderGallery(galleryIndex - 1);
+        resetAutoGallery();
+      });
+
+      galleryNext.addEventListener("click", () => {
+        renderGallery(galleryIndex + 1);
+        resetAutoGallery();
+      });
+
       galleryDots.forEach(dot => {
         dot.addEventListener("click", () => {
           renderGallery(Number(dot.dataset.index || 0));
+          resetAutoGallery();
         });
       });
+
       renderGallery(0);
+      startAutoGallery();
     })();
   </script>
 </body>
