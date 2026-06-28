@@ -656,7 +656,12 @@
 
         const release = await response.json();
         const assets = Array.isArray(release.assets) ? release.assets : [];
-        const packageAsset = assets.find(asset => /\.(zip|exe)$/i.test(asset.name || "")) || assets[0];
+        const packageAsset = assets.find(asset => {
+          const name = String(asset.name || "");
+          return /^Maxclicker\./i.test(name)
+            && /\.zip$/i.test(name)
+            && !/updater/i.test(name);
+        });
 
         versionValue.textContent = release.tag_name || release.name || "Unavailable";
         dateValue.textContent = release.published_at
