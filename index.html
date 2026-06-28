@@ -306,13 +306,50 @@
     .button:hover { transform: translateY(-1px); }
 
     .button.primary {
-      background: linear-gradient(180deg, #18a0df, #0e81b5);
-      box-shadow: 0 12px 26px rgba(24, 160, 223, 0.26);
+      border-color: rgba(240, 246, 252, 0.18);
+      background: linear-gradient(180deg, #24292f, #0d1117);
+      box-shadow: 0 12px 26px rgba(1, 4, 9, 0.34);
+    }
+
+    .download-main {
+      flex-direction: column;
+      gap: 2px;
+      min-height: 70px;
+      padding: 6px 20px;
+    }
+
+    .github-mark {
+      width: 108px;
+      height: 26px;
+      flex: 0 0 26px;
+      display: block;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      opacity: 0.96;
     }
 
     .button.secondary {
       background: rgba(255, 255, 255, 0.06);
       color: var(--text);
+    }
+
+    .button.mirror {
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      min-height: 70px;
+      padding: 6px 20px;
+      background: linear-gradient(180deg, rgba(250, 163, 12, 0.94), rgba(216, 120, 13, 0.94));
+      box-shadow: 0 12px 26px rgba(250, 163, 12, 0.22);
+    }
+
+    .backblaze-mark {
+      width: 108px;
+      height: 26px;
+      flex: 0 0 26px;
+      display: block;
+      object-fit: contain;
+      align-self: center;
     }
 
     .button[aria-disabled="true"] {
@@ -363,6 +400,42 @@
 
     .side-value.small {
       font-size: 15px;
+    }
+
+    .requirements-list {
+      display: grid;
+      gap: 4px;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.28;
+    }
+
+    .requirements-list div {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 4px;
+    }
+
+    .requirements-list div:first-child {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .requirements-list span {
+      color: var(--muted);
+      flex: 0 0 auto;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .requirements-list strong {
+      text-align: right;
+      font-size: 12px;
+      font-weight: 500;
     }
 
     .status-row {
@@ -518,16 +591,35 @@
           <div id="fileValue" class="side-value small">Looking for release asset...</div>
         </div>
 
+        <div class="side-card">
+          <div class="side-label">Minimum System Requirements</div>
+          <div class="requirements-list">
+            <div><span>OS</span><strong>Windows 10/11 (64-bit)</strong></div>
+            <div><span>Processor</span><strong>Dual-core 2.0 GHz+</strong></div>
+            <div><span>RAM</span><strong>4 GB</strong></div>
+            <div><span>Storage</span><strong>200 MB free</strong></div>
+            <div><span>Display</span><strong>1024 x 768 or higher</strong></div>
+            <div><span>Access</span><strong>Administrator</strong></div>
+            <div><span>Internet</span><strong>Updates only</strong></div>
+          </div>
+        </div>
+
         <div class="side-actions">
-          <button id="downloadButton" class="button primary" type="button" aria-disabled="true">Download Latest Build</button>
-          <a class="button secondary" href="https://github.com/crossgozon/maxclicker-download/releases" target="_blank" rel="noreferrer">View Releases</a>
+          <button id="downloadButton" class="button primary download-main" type="button" aria-disabled="true">
+            <span id="downloadButtonLabel">Download Latest Build</span>
+            <img class="github-mark" src="assets/github_logo_cropped.png" alt="" loading="lazy" decoding="async">
+          </button>
+          <button id="mirrorDownloadButton" class="button mirror" type="button" aria-disabled="true">
+            <span>Mirror Download</span>
+            <img class="backblaze-mark" src="https://secure.backblaze.com/bzapp_web_assets/public/scripts/3b562092dff3aa9cd10215e0d762f6e3.svg" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+          </button>
         </div>
       </aside>
     </section>
 
     <footer class="foot">
-      <div>Hosted through GitHub Pages. Release assets are served by GitHub Releases.</div>
-      <div>Official Maxclicker download page.</div>
+      <div>Maxclicker official release channel.</div>
+      <div>Verified builds for supported devices.</div>
     </footer>
   </main>
 
@@ -539,6 +631,8 @@
       const dateValue = document.getElementById("dateValue");
       const fileValue = document.getElementById("fileValue");
       const downloadButton = document.getElementById("downloadButton");
+      const downloadButtonLabel = document.getElementById("downloadButtonLabel");
+      const mirrorDownloadButton = document.getElementById("mirrorDownloadButton");
       const errorBox = document.getElementById("errorBox");
       const galleryTrack = document.getElementById("galleryTrack");
       const galleryPrev = document.getElementById("galleryPrev");
@@ -588,6 +682,7 @@
         downloadButton.setAttribute("data-direct-url", packageAsset.browser_download_url);
         downloadButton.setAttribute("download", packageAsset.name || "Maxclicker.1.0.1.zip");
         downloadButton.removeAttribute("aria-disabled");
+        configureMirrorDownload(release, packageAsset.name || "Maxclicker.1.0.1.zip");
         preloadDownload(packageAsset.browser_download_url, packageAsset.name || "Maxclicker.1.0.1.zip");
       } catch (error) {
         versionValue.textContent = "Unavailable";
@@ -647,6 +742,43 @@
         }
       }
 
+      function parseReleaseMirrors(release) {
+        const body = String((release && release.body) || "");
+        const match = /<!--\s*MAXCLICKER_RELEASE_MIRRORS\s*([\s\S]*?)\s*MAXCLICKER_RELEASE_MIRRORS\s*-->/i.exec(body);
+        if (!match) {
+          return [];
+        }
+
+        try {
+          const parsed = JSON.parse(match[1]);
+          const mirrors = Array.isArray(parsed.mirrors) ? parsed.mirrors : [];
+          return mirrors.filter(mirror => {
+            const url = String((mirror && mirror.url) || "").trim();
+            if (!url || !/^https:\/\/backblaze\.maxie-apps\.online\/maxclicker\/Release\/[^/]+\/[^/]+\.zip$/i.test(url)) {
+              return false;
+            }
+
+            const hash = String((mirror && mirror.zipSha256) || "").trim();
+            return !hash || /^[a-f0-9]{64}$/i.test(hash);
+          });
+        } catch {
+          return [];
+        }
+      }
+
+      function configureMirrorDownload(release, fileName) {
+        const mirrors = parseReleaseMirrors(release);
+        const backblazeMirror = mirrors.find(mirror => /backblaze/i.test(String(mirror.name || ""))) || mirrors[0];
+        if (!backblazeMirror || !backblazeMirror.url) {
+          return;
+        }
+
+        mirrorDownloadButton.style.display = "inline-flex";
+        mirrorDownloadButton.setAttribute("data-direct-url", backblazeMirror.url);
+        mirrorDownloadButton.setAttribute("download", fileName || "Maxclicker.1.0.1.zip");
+        mirrorDownloadButton.removeAttribute("aria-disabled");
+      }
+
       function triggerDownload(url, fileName) {
         const link = document.createElement("a");
         link.href = url;
@@ -691,9 +823,9 @@
           return;
         }
 
-        downloadButton.textContent = "Preparing download...";
+        downloadButtonLabel.textContent = "Preparing download...";
         const prepared = await tryPrepareBlobDownload(directUrl, directUrl, fileName);
-        downloadButton.textContent = "Download Latest Build";
+        downloadButtonLabel.textContent = "Download Latest Build";
 
         if (prepared) {
           downloadButton.setAttribute("download-ready-blob", "1");
@@ -702,6 +834,16 @@
         }
 
         triggerDownload(directUrl, fileName);
+      });
+
+      mirrorDownloadButton.addEventListener("click", function (event) {
+        const directUrl = mirrorDownloadButton.getAttribute("data-direct-url");
+        if (!directUrl) {
+          event.preventDefault();
+          return;
+        }
+
+        triggerDownload(directUrl, mirrorDownloadButton.getAttribute("download") || "Maxclicker.1.0.1.zip");
       });
 
       window.addEventListener("beforeunload", function () {
